@@ -14,7 +14,7 @@ function LoginFrom() {
       await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/",
+        callbackUrl: "/seller_dashboard",
       });
     } catch (error) {
       alert(error.message);
