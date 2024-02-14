@@ -9,7 +9,7 @@ export const getSeller = async () => {
   try {
     const session = await getServerSession(authOptions);
     const db = await connectToDB();
-    const collection = db.collection("shops");
+    const collection = db.collection("sellers");
 
     const sellerinfo = await collection.findOne(
       { _id: new ObjectId(session.user.sub) },
