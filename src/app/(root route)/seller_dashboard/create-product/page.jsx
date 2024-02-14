@@ -7,7 +7,7 @@ async function CreateProduct() {
   const seller = await getSeller();
 
   return (
-    <div className="w-full  bg-[#fff]   shadow-lg h-[87vh] rounded-[4px] p-6 overflow-y-scroll">
+    <div className="w-full  bg-[#fff] scroll_y_hiiden   shadow-lg h-[87vh] rounded-[4px] p-6 overflow-y-auto">
       <h5 className="text-[20px] font-semibold font-Poppins text-center py-2">
         Create Product
       </h5>

@@ -8,7 +8,7 @@ const DashboardHero = async () => {
   const seller = await getSeller();
 
   return (
-    <div className="w-full  ml-auto   h-[87vh] overflow-y-scroll overflow-hidden">
+    <div className="w-full  ml-auto scroll_y_hiiden  h-[87vh] overflow-y-auto overflow-hidden">
       <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
       <Suspense fallback={true}>
         <MainInformation info={orderInfo} />

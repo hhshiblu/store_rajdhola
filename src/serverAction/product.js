@@ -63,10 +63,12 @@ export const CreateProducts = async (formData) => {
     const name = formData.get("name");
     const description = formData.get("description");
     const category = formData.get("category");
+    const subCategory = formData.get("subCategory");
+    const childCategory = formData.get("childCategory");
     const brandName = formData.get("brandName");
     const model = formData.get("model");
     const tags = formData.getAll("tag[]");
-    const subCategory = formData.get("subCategory");
+
     const originalPrice = parseInt(formData.get("originalPrice"));
     const discountPrice = parseInt(formData.get("discountPrice"));
     const stock = parseInt(formData.get("stock"));
@@ -102,6 +104,7 @@ export const CreateProducts = async (formData) => {
       images: imageUrls,
       category,
       subCategory,
+      childCategory,
       brandName,
       model,
       tags,

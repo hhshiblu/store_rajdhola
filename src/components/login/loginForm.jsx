@@ -27,7 +27,7 @@ function LoginFrom() {
         style={{ zIndex: "inherit" }}
       >
         <Image
-          src={"/rajdhola_white_logo.svg"}
+          src={"/rajdhola_title_logo.svg"}
           alt={"rajdhola-logo"}
           className="w-[140px]"
           width={100}

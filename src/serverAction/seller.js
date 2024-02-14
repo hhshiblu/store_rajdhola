@@ -28,12 +28,12 @@ export async function sellerInfo() {
     const db = await connectToDB();
     const productCollection = db.collection("products");
     const OrdersCollection = db.collection("sellerOrder");
-    const sellerId = "6461f815c680d0f7c8f66679";
+    // const sellerId = "6461f815c680d0f7c8f66679";
     const products = await productCollection
       .find({ sellerId: session.user.sub })
       .toArray();
     const orders = await OrdersCollection.find({
-      sellerId: sellerId,
+      sellerId: session.user.sub,
     }).toArray();
 
     const totalprice = orders.reduce((acc, order) => acc + order.price, 0);
@@ -43,7 +43,7 @@ export async function sellerInfo() {
 
     const orderStatus_TotalPrice = await OrdersCollection.find({
       delivery_status: { $in: statuses },
-      sellerId: sellerId,
+      sellerId: session.user.sub,
     }).toArray();
 
     const totalOrder_ByStatus = orderStatus_TotalPrice.reduce((acc, order) => {

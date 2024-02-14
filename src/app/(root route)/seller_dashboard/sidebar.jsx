@@ -9,7 +9,7 @@ import { FaAlignLeft } from "react-icons/fa6";
 import { IoIosNotifications } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 import Image from "next/image";
-
+import { signOut } from "next-auth/react";
 const mainMenu = [
   {
     id: 1,
@@ -32,7 +32,7 @@ const mainMenu = [
         id: 22,
         icon: "zp zp-circle",
         label: "Refund_Orders",
-        link: "/seller_dashboard/refunds-order",
+        link: "#",
       },
     ],
   },
@@ -82,7 +82,7 @@ function Sidebar({ children, seller }) {
           <div>
             <Link href="">
               <Image
-                src="/green_bg_logo.svg"
+                src="/rajdhola_title_logo_white.svg"
                 alt="rajdhola logo"
                 width={100}
                 height={100}
@@ -99,19 +99,20 @@ function Sidebar({ children, seller }) {
           </div>
 
           <div
-            className=" cursor-pointer h-9 w-9 rounded-full bg-white flex justify-center items-center overflow-hidden"
+            className=" cursor-pointer h-9 w-9 rounded-full bg-[#bbeec4fa] flex justify-center items-center overflow-hidden"
             onClick={() => setShowProfile(!profile)}
           >
             <Image
-              src="/vercel.svg"
-              height={100}
-              width={100}
+              src="/rd_icon_color.svg"
+              height={40}
+              width={40}
               alt="profile picture"
+              className="w-[30px] h-[30px]"
             />
           </div>
         </div>
         <div
-          className=" overflow-hidden  fixed top-[8vh] right-0  shadow-lg rounded-md h-[12vh] w-[160px] flex flex-col px-4   duration-200"
+          className=" overflow-hidden  fixed top-[8vh] right-0 bg-white z-50  shadow-lg rounded-md h-[12vh] w-[160px] flex flex-col px-4   duration-200"
           style={{ height: profile ? "12vh" : "0px" }}
         >
           <div className="flex gap-2 pt-4 items-center">
@@ -120,7 +121,12 @@ function Sidebar({ children, seller }) {
           </div>
           <div className="flex items-center gap-2 pt-2 pl-1">
             <MdOutlineLogout />
-            <h2 className=" font-semibold ">LogOut</h2>
+            <h2
+              className=" font-semibold cursor-pointer "
+              onClick={() => signOut()}
+            >
+              LogOut
+            </h2>
           </div>
         </div>
       </div>

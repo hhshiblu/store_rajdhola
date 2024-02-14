@@ -21,14 +21,33 @@ const colorsData = [
 function ProductForm({ categories, seller }) {
   const router = useRouter();
   const formRef = useRef();
+  const childCate = useRef(null);
+  const pName = useRef(null);
+  const pDescription = useRef(null);
+  const pModel = useRef(null);
+  const pStock = useRef(null);
+  const pBrandname = useRef(null);
+  const pOriginalPrice = useRef(null);
+  const pDiscountPrice = useRef(null);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
+
   const [selectedColors, setSelectedColors] = useState([]);
   const [images, setImages] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null); // New state to store the selected subcategory
+
+  const handleSubCategoryChange = (e) => {
+    const selectedSubCategoryName = e.target.value;
+    const selectedSubCategoryObject = categories
+      .find((cat) => cat.name === category)
+      ?.children.find((i) => i.name === selectedSubCategoryName);
+    setSelectedSubCategory(selectedSubCategoryObject);
+    setSubCategory(selectedSubCategoryName);
+  };
 
   const handleColorChange = (e, color) => {
     const { checked } = e.target;
@@ -38,18 +57,6 @@ function ProductForm({ categories, seller }) {
       setSelectedColors((prevColors) => prevColors.filter((c) => c !== color));
     }
   };
-
-  const [product, setProduct] = useState({
-    ProductName: "",
-    description: "",
-    tags: "",
-    originalPrice: "",
-    discountPrice: "",
-    stock: "",
-    brandName: "",
-    model: "",
-  });
-
   const handleImageChange = (e) => {
     const files = e.target.files[0];
     // const newFiles = [...files].filter((file) => {
@@ -59,16 +66,10 @@ function ProductForm({ categories, seller }) {
     // });
     setImages((prev) => [files, ...prev]);
   };
-
   async function handelDeleteFile(index) {
     const newFiles = images.filter((_, i) => i !== index);
     setImages(newFiles);
   }
-
-  const handelChange = (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
-  };
 
   const handleAddSize = () => {
     if (inputValue.trim() !== "") {
@@ -76,7 +77,6 @@ function ProductForm({ categories, seller }) {
       setInputValue("");
     }
   };
-
   const handleDeleteSize = (index) => {
     setSizes((prevSizes) => {
       const newSizes = [...prevSizes];
@@ -107,16 +107,26 @@ function ProductForm({ categories, seller }) {
       newForm.append("images", image);
     });
 
-    newForm.append("name", product.ProductName);
-    newForm.append("description", product.description);
+    const childcategory = childCate.current.value;
+    const name = pName.current.value;
+    const description = pDescription.current.value;
+    const stock = pStock.current.value;
+    const brandName = pBrandname.current.value;
+    const model = pModel.current.value;
+    const originalPrice = pOriginalPrice.current.value;
+    const discountPrice = pDiscountPrice.current.value;
+
+    newForm.append("name", name);
+    newForm.append("description", description);
     newForm.append("category", category);
     newForm.append("subCategory", subCategory);
+    newForm.append("childCategory", childcategory);
     newForm.append("sellerId", seller._id);
-    newForm.append("originalPrice", product.originalPrice);
-    newForm.append("discountPrice", product.discountPrice);
-    newForm.append("stock", product.stock);
-    newForm.append("brandName", product.brandName);
-    newForm.append("model", product.model);
+    newForm.append("originalPrice", originalPrice);
+    newForm.append("discountPrice", discountPrice);
+    newForm.append("stock", stock);
+    newForm.append("brandName", brandName);
+    newForm.append("model", model);
     selectedColors.forEach((color) => {
       newForm.append("color[]", color);
     });
@@ -160,10 +170,9 @@ function ProductForm({ categories, seller }) {
           </label>
           <input
             type="text"
-            name="ProductName"
-            value={product.ProductName}
+            ref={pName}
+            name="name"
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            onChange={handelChange}
             placeholder="Enter your product name..."
           />
         </div>
@@ -173,14 +182,13 @@ function ProductForm({ categories, seller }) {
             Description <span className="text-red-500">*</span>
           </label>
           <textarea
+            ref={pDescription}
             cols="30"
             required
             rows="8"
             type="text"
             name="description"
-            value={product.description}
             className="mt-2 appearance-none block w-full pt-2 px-3 border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            onChange={handelChange}
             placeholder="Enter your product description..."
           ></textarea>
         </div>
@@ -213,7 +221,7 @@ function ProductForm({ categories, seller }) {
               className="w-full mt-2 border h-[35px] rounded-[5px]"
               name="subcategory"
               value={subCategory}
-              onChange={(e) => setSubCategory(e.target.value)}
+              onChange={handleSubCategoryChange}
             >
               <option value="Choose a subcategory">Choose a subcategory</option>
               {categories &&
@@ -226,17 +234,34 @@ function ProductForm({ categories, seller }) {
                   ))}
             </select>
           </div>
+          <div className="w-full md:w-[45%]">
+            <label className="pb-2">
+              Children category <span className="text-red-500">*</span>
+            </label>
+            <select
+              ref={childCate}
+              className="w-full mt-2 border h-[35px] rounded-[5px]"
+              name="childcategory"
+            >
+              <option value="Choose a subcategory">Choose a subcategory</option>
+              {selectedSubCategory &&
+                selectedSubCategory.children.map((cate, i) => (
+                  <option key={i} value={cate.name}>
+                    {cate.name}
+                  </option>
+                ))}
+            </select>
+          </div>
         </div>
         <br />
         <div className="flex gap-6 flex-wrap">
           <div className="w-full md:w-[45%]">
             <label className="pb-2">Brand Name</label>
             <input
+              ref={pBrandname}
               type="text"
               name="brandName"
-              value={product.brandName}
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              onChange={handelChange}
               placeholder="Enter product's brand name..."
             />
           </div>
@@ -245,11 +270,10 @@ function ProductForm({ categories, seller }) {
               Product Model <span className="text-red-500">*</span>
             </label>
             <input
+              ref={pModel}
               type="text"
               name="model"
-              value={product.model}
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              onChange={handelChange}
               placeholder="Enter product's brand name..."
             />
           </div>
@@ -365,11 +389,10 @@ function ProductForm({ categories, seller }) {
               Original Price <span className="text-red-500">*</span>
             </label>
             <input
+              ref={pOriginalPrice}
               type="number"
               name="originalPrice"
-              value={product.originalPrice}
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              onChange={handelChange}
               placeholder="Enter your product price..."
             />
           </div>
@@ -377,11 +400,10 @@ function ProductForm({ categories, seller }) {
           <div>
             <label className="pb-2">Price (With Discount)</label>
             <input
+              ref={pDiscountPrice}
               type="number"
               name="discountPrice"
-              value={product.discountPrice}
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              onChange={handelChange}
               placeholder="Enter your product price with discount..."
             />
           </div>
@@ -391,11 +413,10 @@ function ProductForm({ categories, seller }) {
               Product Stock <span className="text-red-500">*</span>
             </label>
             <input
+              ref={pStock}
               type="number"
               name="stock"
-              value={product.stock}
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              onChange={handelChange}
               placeholder="Enter your product stock..."
             />
           </div>

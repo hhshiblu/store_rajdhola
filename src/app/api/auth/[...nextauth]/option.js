@@ -11,7 +11,7 @@ export const authOptions = {
     async signIn({ user }) {
       try {
         const db = await connectToDB();
-        const collection = db.collection("shops");
+        const collection = db.collection("sellers");
 
         const findUser = await collection.findOne({ email: user.email });
 
@@ -61,7 +61,7 @@ export const authOptions = {
         const { email, password } = credentials;
 
         const db = await connectToDB();
-        const collection = db.collection("shops");
+        const collection = db.collection("sellers");
         const seller = await collection.findOne({ email: email });
 
         if (!seller) {
