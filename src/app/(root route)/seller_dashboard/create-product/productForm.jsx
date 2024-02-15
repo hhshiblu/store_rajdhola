@@ -59,12 +59,22 @@ function ProductForm({ categories, seller }) {
   };
   const handleImageChange = (e) => {
     const files = e.target.files[0];
-    // const newFiles = [...files].filter((file) => {
-    //   if (file.size < 1024 * 1024 && file.type.startsWith("image/")) {
-    //     return file;
-    //   }
-    // });
-    setImages((prev) => [files, ...prev]);
+    if (
+      files.size < 1.5 * 1024 * 1024 &&
+      (files.type === "image/jpeg" || files.type === "image/png")
+    ) {
+      setImages((prev) => [files, ...prev]);
+    } else {
+      toast.error(
+        "Please choose a JPG or PNG image with size less than 1.5MB",
+        {
+          duration: 3000,
+          cancel: {
+            label: "cancel",
+          },
+        }
+      );
+    }
   };
   async function handelDeleteFile(index) {
     const newFiles = images.filter((_, i) => i !== index);

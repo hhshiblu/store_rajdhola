@@ -3,7 +3,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 import connectToDB from "@/lib/connect";
 import { deleteFiles, uploadFileToS3 } from "@/lib/uploadImage";
-
+import { v4 as uuidv4 } from "uuid";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -92,10 +92,10 @@ export const CreateProducts = async (formData) => {
       };
     }
     const imageUrls = [];
-
+    const names = uuidv4();
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      const res = await uploadFileToS3(buffer, file.name);
+      const res = await uploadFileToS3(buffer, names + file.name);
       imageUrls.push({ url: res.url, objectkey: res.objectkey });
     }
     const product = {
