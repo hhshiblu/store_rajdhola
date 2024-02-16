@@ -67,6 +67,12 @@ export const CreateProducts = async (formData) => {
     const childCategory = formData.get("childCategory");
     const brandName = formData.get("brandName");
     const model = formData.get("model");
+    const country = formData.get("country");
+    const productMaterial = formData.get("productMaterial");
+    const powerSupply = formData.get("powerSupply");
+    const capacity = formData.get("capacity");
+    const powerConsumed = formData.get("powerConsumed");
+    const warranty = formData.get("warranty");
     const tags = formData.getAll("tag[]");
 
     const originalPrice = parseInt(formData.get("originalPrice"));
@@ -84,6 +90,7 @@ export const CreateProducts = async (formData) => {
       !originalPrice ||
       !model ||
       !stock ||
+      !country ||
       !sellerId ||
       !files
     ) {
@@ -105,6 +112,12 @@ export const CreateProducts = async (formData) => {
       category,
       subCategory,
       childCategory,
+      country,
+      productMaterial,
+      powerSupply,
+      capacity,
+      powerConsumed,
+      warranty,
       brandName,
       model,
       tags,

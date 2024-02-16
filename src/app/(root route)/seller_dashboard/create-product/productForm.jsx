@@ -25,6 +25,14 @@ function ProductForm({ categories, seller }) {
   const pName = useRef(null);
   const pDescription = useRef(null);
   const pModel = useRef(null);
+  const pCountry = useRef(null);
+  const pMaterial = useRef(null);
+  const pCapacity = useRef(null);
+  const pPower = useRef(null);
+  const pPowerConsumed = useRef(null);
+  const pWarranty = useRef(null);
+
+  const pType = useRef(null);
   const pStock = useRef(null);
   const pBrandname = useRef(null);
   const pOriginalPrice = useRef(null);
@@ -108,9 +116,40 @@ function ProductForm({ categories, seller }) {
       return newSizes;
     });
   };
-
+  const refsToReset = [
+    childCate,
+    pName,
+    pDescription,
+    pModel,
+    pCountry,
+    pMaterial,
+    pCapacity,
+    pPower,
+    pPowerConsumed,
+    pWarranty,
+    pType,
+    pStock,
+    pBrandname,
+    pOriginalPrice,
+    pDiscountPrice,
+  ];
   const HandelSubmit = async () => {
-    if (images.length > 5) return alert("upload up to 5 image files");
+    if (!tags.length > 0)
+      return toast.error("please add some  keywords ", {
+        duration: 3000,
+        cancel: {
+          label: "cancel",
+        },
+      });
+
+    if (images.length > 5)
+      return toast.error("upload up to 5 image files ", {
+        duration: 3000,
+        cancel: {
+          label: "cancel",
+        },
+      });
+
     const newForm = new FormData();
 
     images.forEach((image) => {
@@ -125,7 +164,13 @@ function ProductForm({ categories, seller }) {
     const model = pModel.current.value;
     const originalPrice = pOriginalPrice.current.value;
     const discountPrice = pDiscountPrice.current.value;
-
+    const productType = pType.current.value;
+    const country = pCountry.current.value;
+    const productMaterial = pMaterial.current.value;
+    const powerSupply = pPower.current.value;
+    const capacity = pCapacity.current.value;
+    const powerConsumed = pPowerConsumed.current.value;
+    const warranty = pWarranty.current.value;
     newForm.append("name", name);
     newForm.append("description", description);
     newForm.append("category", category);
@@ -136,7 +181,18 @@ function ProductForm({ categories, seller }) {
     newForm.append("discountPrice", discountPrice);
     newForm.append("stock", stock);
     newForm.append("brandName", brandName);
+    newForm.append("country", country);
     newForm.append("model", model);
+
+    newForm.append("productType", productType);
+
+    // this for electrical product
+    newForm.append("productMaterial", productMaterial);
+    newForm.append("powerSupply", powerSupply);
+    newForm.append("capacity", capacity);
+    newForm.append("powerConsumed", powerConsumed);
+    newForm.append("warranty", warranty);
+
     selectedColors.forEach((color) => {
       newForm.append("color[]", color);
     });
@@ -159,7 +215,14 @@ function ProductForm({ categories, seller }) {
     }
     if (res.success == true) {
       formRef.current.reset();
-      router.push("/seller_dashboard/all-products");
+      refsToReset.forEach((ref) => (ref.current = null));
+      setCategory("");
+      setSubCategory("");
+      setImages([]);
+      setSizes([]);
+      setTags([]);
+      setSelectedColors([]);
+      // router.push("/seller_dashboard/all-products");
       toast.success(res.message, {
         duration: 3000,
         cancel: {
@@ -262,15 +325,37 @@ function ProductForm({ categories, seller }) {
                 ))}
             </select>
           </div>
-        </div>
-        <br />
-        <div className="flex gap-6 flex-wrap">
           <div className="w-full md:w-[45%]">
             <label className="pb-2">Brand Name</label>
             <input
               ref={pBrandname}
               type="text"
               name="brandName"
+              className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Enter product's brand name..."
+            />
+          </div>
+          <div className="w-full md:w-[45%]">
+            <label className="pb-2">
+              Country Of Origin <span className="text-red-500">*</span>
+            </label>
+            <input
+              ref={pCountry}
+              type="text"
+              name="country"
+              className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Product's origin country..."
+            />
+          </div>{" "}
+        </div>
+        <br />
+        <div className="flex gap-6 flex-wrap">
+          <div className="w-full md:w-[45%]">
+            <label className="pb-2">Product Type</label>
+            <input
+              ref={pType}
+              type="text"
+              name="productType"
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="Enter product's brand name..."
             />
@@ -308,88 +393,156 @@ function ProductForm({ categories, seller }) {
         <br />
 
         {/* Size checkboxes */}
-        <div>
-          <div className="flex gap-3 pb-2 flex-wrap ">
-            {sizes.map((size, index) => (
-              <div
-                key={index}
-                className="flex gap-2 px-2 bg-slate-300 text-black border-sm rounded-md"
-              >
-                <span>{size}</span>
-                <h2
-                  onClick={() => handleDeleteSize(index)}
-                  className="cursor-pointer"
+        <div className="flex flex-wrap w-full pb-4">
+          <div className="w-full md:w-[45%] ">
+            <div className="flex gap-3 pb-2 flex-wrap ">
+              {sizes.map((size, index) => (
+                <div
+                  key={index}
+                  className="flex gap-2 px-2 bg-slate-300 text-black border-sm rounded-md"
                 >
-                  ✖
-                </h2>
-              </div>
-            ))}
-          </div>
-          <div className="w-full flex gap-3  items-center">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddSize();
-                }
-              }}
-              placeholder="Enter size"
-              className="mt-2 appearance-none block w-[70%] md:w-[50%]  px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+                  <span>{size}</span>
+                  <h2
+                    onClick={() => handleDeleteSize(index)}
+                    className="cursor-pointer"
+                  >
+                    ✖
+                  </h2>
+                </div>
+              ))}
+            </div>
+            <div className=" flex gap-3  items-center">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddSize();
+                  }
+                }}
+                placeholder="Enter size"
+                className="mt-2 appearance-none block w-[60%]  px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
 
-            <h4
-              onClick={handleAddSize}
-              className="bg-slate-300 text-black border border-[#0d501715] rounded-md px-3 cursor-pointer mt-1 font-medium"
-            >
-              Add Size
-            </h4>
+              <h4
+                onClick={handleAddSize}
+                className="bg-slate-300 text-black border border-[#0d501715] rounded-md px-3 cursor-pointer mt-1 font-medium"
+              >
+                Add Size
+              </h4>
+            </div>
+          </div>
+          <br />
+          {/* tag array */}
+          <div className="w-full md:w-[45%]">
+            <div className="flex gap-3 pb-2 flex-wrap ">
+              {tags.map((size, index) => (
+                <div
+                  key={index}
+                  className="flex gap-2 px-2 bg-slate-300 text-black border-sm rounded-md"
+                >
+                  <span>{size}</span>
+                  <h2
+                    onClick={() => handleDeleteTag(index)}
+                    className="cursor-pointer"
+                  >
+                    ✖
+                  </h2>
+                </div>
+              ))}
+            </div>
+            <div className="w-full flex gap-3  items-center">
+              <input
+                type="text"
+                value={tagValue}
+                onChange={(e) => setTagValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddTag();
+                  }
+                }}
+                placeholder="Enter keywords"
+                className="mt-2 appearance-none block w-[60%]  px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+
+              <h4
+                onClick={handleAddTag}
+                className="bg-slate-300 text-black border border-[#0d501715] rounded-md px-3 cursor-pointer mt-1 font-medium"
+              >
+                Add Keywords
+              </h4>
+            </div>
           </div>
         </div>
-        <br />
-        {/* tag array */}
-        <div>
-          <div className="flex gap-3 pb-2 flex-wrap ">
-            {tags.map((size, index) => (
-              <div
-                key={index}
-                className="flex gap-2 px-2 bg-slate-300 text-black border-sm rounded-md"
-              >
-                <span>{size}</span>
-                <h2
-                  onClick={() => handleDeleteTag(index)}
-                  className="cursor-pointer"
-                >
-                  ✖
-                </h2>
-              </div>
-            ))}
-          </div>
-          <div className="w-full flex gap-3  items-center">
-            <input
-              type="text"
-              value={tagValue}
-              onChange={(e) => setTagValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddTag();
-                }
-              }}
-              placeholder="Enter size"
-              className="mt-2 appearance-none block w-[70%] md:w-[50%]  px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+        {/* // category based some  product info */}
 
-            <h4
-              onClick={handleAddTag}
-              className="bg-slate-300 text-black border border-[#0d501715] rounded-md px-3 cursor-pointer mt-1 font-medium"
-            >
-              Add Tags
-            </h4>
+        {(category == "Electronics Device" ||
+          category == "Electronics Accessories" ||
+          category == "Kitchen") && (
+          <div className="flex gap-6 flex-wrap pt-2 border border-dashed border-blue-700 p-2">
+            <div className="w-full md:w-[45%]">
+              <label className="pb-2">
+                Product material <span className="text-red-500">*</span>
+              </label>
+              <input
+                ref={pMaterial}
+                type="text"
+                name="productMaterial"
+                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter product's material..."
+              />
+            </div>
+            <div className="w-full md:w-[45%]">
+              <label className="pb-2">
+                Power Supply <span className="text-red-500">*</span>
+              </label>
+              <input
+                ref={pPower}
+                type="text"
+                name="powerSupply"
+                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter product's power suppy.."
+              />
+            </div>
+            <div className="w-full md:w-[45%]">
+              <label className="pb-2">Capacity </label>
+              <input
+                ref={pCapacity}
+                type="text"
+                name="capacity"
+                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter product's capacity..."
+              />
+            </div>
+            <div className="w-full md:w-[45%]">
+              <label className="pb-2">
+                Power Consumed <span className="text-red-500">*</span>
+              </label>
+              <input
+                ref={pPowerConsumed}
+                type="text"
+                name="powerConsumed"
+                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Power consumed (1** W)..."
+              />
+            </div>
+
+            <div className="w-full md:w-[45%]">
+              <label className="pb-2">Warranty</label>
+              <input
+                ref={pWarranty}
+                type="text"
+                name="warranty"
+                className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="how days warranty ..."
+              />
+            </div>
           </div>
-        </div>
+        )}
+
         <br />
         {/* price stock  */}
 
