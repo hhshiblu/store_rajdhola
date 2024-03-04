@@ -82,6 +82,11 @@ export const CreateProducts = async (formData) => {
     const color = formData.getAll("color[]");
     const size = formData.getAll("size[]");
     const sellerId = formData.get("sellerId");
+    if (previousPrice < presentPrice) {
+      return {
+        error: "old price must be greater than Present price",
+      };
+    }
     if (
       !name ||
       !description ||
@@ -93,8 +98,8 @@ export const CreateProducts = async (formData) => {
       !productType ||
       !stock ||
       !country ||
-      !sellerId
-      // !files
+      !sellerId ||
+      !files
     ) {
       return {
         error: "All fields are required",
@@ -139,7 +144,7 @@ export const CreateProducts = async (formData) => {
     };
 
     const res = await collection.insertOne(product);
-    console.log(res);
+
     if (res.acknowledged == true) {
       return {
         success: true,
@@ -154,7 +159,7 @@ export const CreateProducts = async (formData) => {
 export const comitionPrice = (price, category) => {
   const FashionPercentage = 7.53;
   const motherAndBaby = 3.62;
-  const bag_buity = 4.73;
+  const bag_buity = 3.43;
   const kids_electrical = 6.69;
   const kitchen_home = 4.52;
   const Automotive = 4.23;

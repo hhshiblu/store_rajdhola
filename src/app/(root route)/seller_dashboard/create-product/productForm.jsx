@@ -12,10 +12,13 @@ const colorsData = [
   "Red",
   "White",
   "Green",
-  "blue",
-  "yellow",
-  "cyan",
-  "off-white",
+  "Blue",
+  "Yellow",
+  "Cyan",
+  "Pink",
+  "Silver",
+  "Dark blue",
+  "Off-white",
 ];
 
 function ProductForm({ categories, seller }) {
@@ -548,7 +551,7 @@ function ProductForm({ categories, seller }) {
 
         <div className="flex gap-2 flex-col sm:flex-row m-auto">
           <div>
-            <label className="pb-2">Previous Price</label>
+            <label className="pb-2">Old Price</label>
             <input
               ref={pPrevious}
               type="number"
