@@ -5,6 +5,7 @@ import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { MdBorderClear } from "react-icons/md";
 
 function MainInformation({ info }) {
+  console.log(info);
   const [detailsOrder, setDetailsOrder] = useState(false);
   return (
     <div>
@@ -23,8 +24,8 @@ function MainInformation({ info }) {
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-white text-[22px] font-[500]">
-            {info?.totalOrder_ByStatus.delivered?.price
-              ? info?.totalOrder_ByStatus.delivered?.price
+            {info?.totalOrder_ByStatus?.delivered?.price
+              ? info?.totalOrder_ByStatus?.delivered?.price
               : 0}
           </h5>
           <Link href="/seller_dashboard/withdraw-money">
@@ -105,15 +106,15 @@ function MainInformation({ info }) {
 
             <h5 className="py-3 text-[15px] font-[500]">
               Total products :
-              {info.totalOrder_ByStatus.pending?.totalProducts
-                ? info.totalOrder_ByStatus.pending?.totalProducts
+              {info.totalOrder_ByStatus?.pending?.totalProducts
+                ? info.totalOrder_ByStatus?.pending?.totalProducts
                 : 0}
             </h5>
             <h2>
               {" "}
               Total Price :
-              {info?.totalOrder_ByStatus.pending?.price
-                ? info?.totalOrder_ByStatus.pending?.price
+              {info?.totalOrder_ByStatus?.pending?.price
+                ? info?.totalOrder_ByStatus?.pending?.price
                 : 0}
             </h2>
           </div>
@@ -127,15 +128,15 @@ function MainInformation({ info }) {
 
             <h5 className="py-3 text-[15px] font-[500]">
               Total products :
-              {info?.totalOrder_ByStatus.delivered?.totalProducts
-                ? info?.totalOrder_ByStatus.delivered?.totalProducts
+              {info?.totalOrder_ByStatus?.delivered?.totalProducts
+                ? info?.totalOrder_ByStatus?.delivered?.totalProducts
                 : 0}
             </h5>
             <h2>
               {" "}
               Total Price :{" "}
-              {info?.totalOrder_ByStatus.delivered?.price
-                ? info?.totalOrder_ByStatus.delivered?.price
+              {info?.totalOrder_ByStatus?.delivered?.price
+                ? info?.totalOrder_ByStatus?.delivered?.price
                 : 0}
             </h2>
           </div>

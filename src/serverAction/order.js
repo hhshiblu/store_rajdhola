@@ -10,11 +10,10 @@ export const getOrders = async () => {
     const session = await getServerSession(authOptions);
     const db = await connectToDB();
     const collection = db.collection("sellerOrder");
-    const sellerId = "6461f815c680d0f7c8f66679";
 
     const ordersArray = await collection
       .find({
-        sellerId: sellerId,
+        sellerId: session.user.sub,
       })
       .toArray();
 

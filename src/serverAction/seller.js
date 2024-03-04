@@ -28,7 +28,6 @@ export async function sellerInfo() {
     const db = await connectToDB();
     const productCollection = db.collection("products");
     const OrdersCollection = db.collection("sellerOrder");
-    // const sellerId = "6461f815c680d0f7c8f66679";
     const products = await productCollection
       .find({ sellerId: session.user.sub })
       .toArray();
@@ -37,8 +36,10 @@ export async function sellerInfo() {
     }).toArray();
 
     const totalprice = orders.reduce((acc, order) => acc + order.price, 0);
-
-    // Define the status you want to filter
+    const totalCommition = orders.reduce(
+      (acc, order) => acc + order.commition,
+      0
+    );
     const statuses = ["pending", "delivered"];
 
     const orderStatus_TotalPrice = await OrdersCollection.find({
@@ -47,19 +48,18 @@ export async function sellerInfo() {
     }).toArray();
 
     const totalOrder_ByStatus = orderStatus_TotalPrice.reduce((acc, order) => {
-      const { delivery_status, price, products } = order;
+      const { delivery_status, price, products, commition } = order;
 
       if (!acc[delivery_status]) {
         acc[delivery_status] = {
           totalProducts: 0,
           price: 0,
+          commition: 0,
         };
       }
-
-      // Summing up total products for each order
+      acc[delivery_status].commition += commition;
       acc[delivery_status].totalProducts += products.length;
 
-      // Summing up total price for each order
       acc[delivery_status].price += price;
 
       return acc;
@@ -69,6 +69,7 @@ export async function sellerInfo() {
       totalProducts: products.length,
       totalOrders: orders.length,
       totalprice: totalprice,
+      totalCommition,
       totalOrder_ByStatus: totalOrder_ByStatus,
     };
   } catch (error) {

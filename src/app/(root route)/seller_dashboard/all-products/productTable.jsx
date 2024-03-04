@@ -116,7 +116,7 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "discountPrice",
+    accessorKey: "presentPrice",
     header: ({ column }) => {
       return (
         <Button
@@ -129,7 +129,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("discountPrice")}</div>
+      <div className="capitalize">{row.getValue("presentPrice")}</div>
     ),
   },
   {
@@ -147,6 +147,23 @@ export const columns = [
     },
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("stock")}</div>
+    ),
+  },
+  {
+    accessorKey: "commition",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Commition
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("commition")}</div>
     ),
   },
   {

@@ -73,10 +73,11 @@ export const CreateProducts = async (formData) => {
     const capacity = formData.get("capacity");
     const powerConsumed = formData.get("powerConsumed");
     const warranty = formData.get("warranty");
+    const productType = formData.get("type");
     const tags = formData.getAll("tag[]");
 
-    const originalPrice = parseInt(formData.get("originalPrice"));
-    const discountPrice = parseInt(formData.get("discountPrice"));
+    const previousPrice = parseInt(formData.get("previousPrice"));
+    const presentPrice = parseInt(formData.get("presentPrice"));
     const stock = parseInt(formData.get("stock"));
     const color = formData.getAll("color[]");
     const size = formData.getAll("size[]");
@@ -87,17 +88,19 @@ export const CreateProducts = async (formData) => {
       !category ||
       !tags ||
       !subCategory ||
-      !originalPrice ||
+      !presentPrice ||
       !model ||
+      !productType ||
       !stock ||
       !country ||
-      !sellerId ||
-      !files
+      !sellerId
+      // !files
     ) {
       return {
         error: "All fields are required",
       };
     }
+    const commition = Math.round(comitionPrice(presentPrice, category));
     const imageUrls = [];
     const names = uuidv4();
     for (const file of files) {
@@ -113,6 +116,7 @@ export const CreateProducts = async (formData) => {
       subCategory,
       childCategory,
       country,
+      productType,
       productMaterial,
       powerSupply,
       capacity,
@@ -121,8 +125,8 @@ export const CreateProducts = async (formData) => {
       brandName,
       model,
       tags,
-      originalPrice,
-      discountPrice,
+      previousPrice,
+      presentPrice,
       stock,
       color,
       size,
@@ -130,10 +134,12 @@ export const CreateProducts = async (formData) => {
       sold_out: 0,
       ratings: 0,
       reviews: [],
+      commition,
       createdAt: new Date(),
     };
 
     const res = await collection.insertOne(product);
+    console.log(res);
     if (res.acknowledged == true) {
       return {
         success: true,
@@ -143,4 +149,47 @@ export const CreateProducts = async (formData) => {
   } catch (error) {
     return { message: error.message };
   }
+};
+
+export const comitionPrice = (price, category) => {
+  const FashionPercentage = 7.53;
+  const motherAndBaby = 3.62;
+  const bag_buity = 4.73;
+  const kids_electrical = 6.69;
+  const kitchen_home = 4.52;
+  const Automotive = 4.23;
+  const food_book_other = 2.53;
+  let comitionPrice = 0;
+  if (
+    category === "Men's Fashion" ||
+    category === "Women's Fashions" ||
+    category === "Boy's Fashions" ||
+    category === "Girl's Fashions"
+  ) {
+    comitionPrice = price * (FashionPercentage / 100);
+  }
+  if (category === "Mother & Baby") {
+    comitionPrice = price * (motherAndBaby / 100);
+  }
+  if (category === "Bag & Jewellery" || category === "Health & Beauty") {
+    comitionPrice = price * (bag_buity / 100);
+  }
+  if (category === "Kids & Toys" || category === "Electronics Device") {
+    comitionPrice = price * (kids_electrical / 100);
+  }
+  if (category === "Kitchen" || category === "Home & Lifestyle") {
+    comitionPrice = price * (kitchen_home / 100);
+  }
+  if (category === "Automotive & Motorbike") {
+    comitionPrice = price * (Automotive / 100);
+  }
+  if (
+    category === "Foods" ||
+    category === "Accessories" ||
+    category === "Books"
+  ) {
+    comitionPrice = price * (food_book_other / 100);
+  }
+
+  return comitionPrice;
 };

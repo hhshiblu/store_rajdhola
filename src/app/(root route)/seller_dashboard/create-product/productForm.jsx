@@ -35,8 +35,8 @@ function ProductForm({ categories, seller }) {
   const pType = useRef(null);
   const pStock = useRef(null);
   const pBrandname = useRef(null);
-  const pOriginalPrice = useRef(null);
-  const pDiscountPrice = useRef(null);
+  const pPrevious = useRef(null);
+  const pPresent = useRef(null);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
 
@@ -130,8 +130,6 @@ function ProductForm({ categories, seller }) {
     pType,
     pStock,
     pBrandname,
-    pOriginalPrice,
-    pDiscountPrice,
   ];
   const HandelSubmit = async () => {
     if (!tags.length > 0)
@@ -156,35 +154,37 @@ function ProductForm({ categories, seller }) {
       newForm.append("images", image);
     });
 
-    const childcategory = childCate.current.value;
-    const name = pName.current.value;
-    const description = pDescription.current.value;
-    const stock = pStock.current.value;
-    const brandName = pBrandname.current.value;
-    const model = pModel.current.value;
-    const originalPrice = pOriginalPrice.current.value;
-    const discountPrice = pDiscountPrice.current.value;
-    const productType = pType.current.value;
-    const country = pCountry.current.value;
-    const productMaterial = pMaterial.current.value;
-    const powerSupply = pPower.current.value;
-    const capacity = pCapacity.current.value;
-    const powerConsumed = pPowerConsumed.current.value;
-    const warranty = pWarranty.current.value;
+    const childcategory = childCate.current ? childCate.current.value : "";
+    const name = pName.current ? pName.current.value : "";
+    const description = pDescription.current ? pDescription.current.value : "";
+    const stock = pStock.current ? pStock.current.value : "";
+    const brandName = pBrandname.current ? pBrandname.current.value : "";
+    const model = pModel.current ? pModel.current.value : "";
+    const previousPrice = pPrevious.current ? pPrevious.current.value : "";
+    const presentPrice = pPresent.current ? pPresent.current.value : "";
+    const productType = pType.current ? pType.current.value : "";
+    const country = pCountry.current ? pCountry.current.value : "";
+    const productMaterial = pMaterial.current ? pMaterial.current.value : "";
+    const powerSupply = pPower.current ? pPower.current.value : "";
+    const capacity = pCapacity.current ? pCapacity.current.value : "";
+    const powerConsumed = pPowerConsumed.current
+      ? pPowerConsumed.current.value
+      : "";
+    const warranty = pWarranty.current ? pWarranty.current.value : "";
     newForm.append("name", name);
     newForm.append("description", description);
     newForm.append("category", category);
     newForm.append("subCategory", subCategory);
     newForm.append("childCategory", childcategory);
     newForm.append("sellerId", seller._id);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
+    newForm.append("previousPrice", previousPrice);
+    newForm.append("presentPrice", presentPrice);
     newForm.append("stock", stock);
     newForm.append("brandName", brandName);
     newForm.append("country", country);
     newForm.append("model", model);
 
-    newForm.append("productType", productType);
+    newForm.append("type", productType);
 
     // this for electrical product
     newForm.append("productMaterial", productMaterial);
@@ -548,24 +548,25 @@ function ProductForm({ categories, seller }) {
 
         <div className="flex gap-2 flex-col sm:flex-row m-auto">
           <div>
-            <label className="pb-2">
-              Original Price <span className="text-red-500">*</span>
-            </label>
+            <label className="pb-2">Previous Price</label>
             <input
-              ref={pOriginalPrice}
+              ref={pPrevious}
               type="number"
-              name="originalPrice"
+              name="previousPrice"
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="Enter your product price..."
             />
           </div>
           <br />
           <div>
-            <label className="pb-2">Price (With Discount)</label>
+            <label className="pb-2">
+              Present Price <span className="text-red-500">*</span>{" "}
+            </label>
             <input
-              ref={pDiscountPrice}
+              required
+              ref={pPresent}
               type="number"
-              name="discountPrice"
+              name="presentPrice"
               className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="Enter your product price with discount..."
             />
