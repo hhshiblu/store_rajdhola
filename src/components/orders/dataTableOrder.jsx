@@ -40,6 +40,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { redirect } from "next/dist/server/api-utils";
 
 const selectedRowIds = [];
 

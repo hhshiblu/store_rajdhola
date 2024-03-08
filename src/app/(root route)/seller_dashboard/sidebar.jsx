@@ -103,7 +103,7 @@ function Sidebar({ children, seller }) {
             onClick={() => setShowProfile(!profile)}
           >
             <Image
-              src="/rd_icon_color.svg"
+              src={seller?.images?.url}
               height={40}
               width={40}
               alt="profile picture"
@@ -115,10 +115,11 @@ function Sidebar({ children, seller }) {
           className=" overflow-hidden  fixed top-[8vh] right-0 bg-white z-50  shadow-lg rounded-md h-[12vh] w-[160px] flex flex-col px-4   duration-200"
           style={{ height: profile ? "12vh" : "0px" }}
         >
-          <div className="flex gap-2 pt-4 items-center">
+          <Link href="/user-profile" className="flex gap-2 pt-4 items-center">
+            {" "}
             <RxAvatar size={21} />
             <h2 className="font-semibold ">View Profile</h2>
-          </div>
+          </Link>
           <div className="flex items-center gap-2 pt-2 pl-1">
             <MdOutlineLogout />
             <h2
@@ -249,7 +250,7 @@ function Sidebar({ children, seller }) {
             </ul>
           </div>
         </div>
-        <div className="md:px-8 px-2 py-4 w-full">{children}</div>
+        <div className="md:px-8 px-2 py-1 w-full">{children}</div>
       </div>
     </div>
   );

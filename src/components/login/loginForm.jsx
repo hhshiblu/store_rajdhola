@@ -57,14 +57,14 @@ function LoginFrom() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email
+                Enter email or Number
               </label>
               <div className="mt-1">
                 <input
-                  type="email"
+                  type="text"
                   name="email"
                   autoComplete="email"
-                  placeholder="example@gmail.com"
+                  placeholder="Enter email or Number"
                   required
                   value={email}
                   onChange={(e) => setemail(e.target.value)}

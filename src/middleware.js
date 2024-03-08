@@ -10,7 +10,7 @@ export async function middleware(request) {
     "/seller_dashboard/all-products",
     "/seller_dashboard/create-product",
     "/seller_dashboard/withdraw-money",
-    "/seller_dashboard/",
+    "/user-profile/",
     "/seller_dashboard",
   ];
   if (!token && userProtectedRoutes.includes(pathname)) {

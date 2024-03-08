@@ -13,8 +13,14 @@ export const authOptions = {
         const db = await connectToDB();
         const collection = db.collection("sellers");
 
-        const findUser = await collection.findOne({ email: user.email });
+        const findUser = await collection.findOne({
+          $or: [
+            { email: user.email },
+            { phoneNumber: parseInt(user.phoneNumber, 10) },
+          ],
+        });
 
+        console.log(findUser, "find user");
         if (findUser) {
           return true;
         }
@@ -25,6 +31,7 @@ export const authOptions = {
 
     async jwt({ token, user }) {
       if (user) {
+        console.log("use token", user);
         token.sub = user._id;
         token.picture = user.avatar;
         token.phoneNumber = user.phoneNumber;
@@ -50,19 +57,21 @@ export const authOptions = {
       id: "credentials",
 
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
+        identity: {
+          label: "identity",
+          type: "text",
           placeholder: "Enter your email",
         },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const { email, password } = credentials;
+        const { identity, password } = credentials;
 
         const db = await connectToDB();
         const collection = db.collection("sellers");
-        const seller = await collection.findOne({ email: email });
+        const seller = await collection.findOne({
+          $or: [{ email: identity }, { phoneNumber: parseInt(identity, 10) }],
+        });
 
         if (!seller) {
           throw new Error("Invalied credentials");

@@ -40,7 +40,8 @@ export const deleteProductAction = async (id, imagekey) => {
     const db = await connectToDB();
     const collection = db.collection("products");
 
-    await deleteFiles(imagekey);
+    const res = await deleteFiles(imagekey);
+    console.log(res);
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
 
     if (result.acknowledged === true) {
@@ -93,6 +94,7 @@ export const CreateProducts = async (formData) => {
       !category ||
       !tags ||
       !subCategory ||
+      !childCategory ||
       !presentPrice ||
       !model ||
       !productType ||
@@ -161,7 +163,7 @@ export const comitionPrice = (price, category) => {
   const motherAndBaby = 3.62;
   const bag_buity = 3.43;
   const kids_electrical = 6.69;
-  const kitchen_home = 4.52;
+  const kitchen_home = 4.99;
   const Automotive = 4.23;
   const food_book_other = 2.53;
   let comitionPrice = 0;
