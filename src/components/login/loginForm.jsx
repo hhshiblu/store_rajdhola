@@ -6,13 +6,13 @@ import SubmitButton from "@/components/route/button/submitButton";
 import Link from "next/link";
 import Image from "next/image";
 function LoginFrom() {
-  const [email, setemail] = useState("");
+  const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword1, setShowPassword1] = useState(false);
   const HandelSubmit = async () => {
     try {
       await signIn("credentials", {
-        email,
+        identity,
         password,
         callbackUrl: "/seller_dashboard",
       });
@@ -54,7 +54,7 @@ function LoginFrom() {
           <form className="space-y-3" action={HandelSubmit}>
             <div>
               <label
-                htmlFor="email"
+                htmlFor="identity"
                 className="block text-sm font-medium text-gray-700"
               >
                 Enter email or Number
@@ -62,12 +62,12 @@ function LoginFrom() {
               <div className="mt-1">
                 <input
                   type="text"
-                  name="email"
+                  name="identity"
                   autoComplete="email"
                   placeholder="Enter email or Number"
                   required
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
+                  value={identity}
+                  onChange={(e) => setIdentity(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-400 focus:border-blue-500 sm:text-sm"
                 />
               </div>

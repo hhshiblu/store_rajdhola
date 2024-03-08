@@ -15,7 +15,6 @@ import { Division } from "@/lib/data";
 import SubmitButton from "../button/submitButton";
 import { UpdateInfo } from "@/serverAction/seller";
 function UpdateSellerInfo({ seller }) {
-
   const router = useRouter();
   const [name, setName] = useState(seller?.userName || "");
   const [shopName, setShopName] = useState(seller?.shopName || "");
@@ -29,6 +28,7 @@ function UpdateSellerInfo({ seller }) {
     const file = e.target.files[0];
     setAvatar(file);
   };
+
   const selectedDivisionRef = useRef("");
   const selectedDistrictRef = useRef("");
   const selectedUpazilaRef = useRef("");
@@ -63,54 +63,63 @@ function UpdateSellerInfo({ seller }) {
   // action here
 
   const handleFormSubmit = async () => {
-    try {
-      const newForm = new FormData();
+    if (!avatar) {
+      toast.error("Please provide Image", {
+        duration: 3000,
+        cancel: {
+          label: "cancel",
+        },
+      });
+    } else {
+      try {
+        const newForm = new FormData();
 
-      newForm.append("file", avatar);
-      newForm.append("shopName", shopName);
-      newForm.append("userName", name);
-      newForm.append("email", email);
+        newForm.append("file", avatar);
+        newForm.append("shopName", shopName);
+        newForm.append("userName", name);
+        newForm.append("email", email);
 
-      newForm.append("zipCode", zipcode);
-      newForm.append("phoneNumber", number);
-      newForm.append("category", category);
-      newForm.append(
-        "address",
-        JSON.stringify({
-          division: selectedDivisionRef.current,
-          district: selectedDistrictRef.current,
-          upazila: selectedUpazilaRef.current,
-          area: area,
-        })
-      );
-      const res = await UpdateInfo(newForm);
-      if (res.error) {
-        toast.error(res.error, {
-          duration: 3000,
-          cancel: {
-            label: "cancel",
-          },
-        });
-      }
-      if (res.success == true) {
-        router.push(
-          `/seller_dashboard/?message= Shop information updated successfully`
+        newForm.append("zipCode", zipcode);
+        newForm.append("phoneNumber", number);
+        newForm.append("category", category);
+        newForm.append(
+          "address",
+          JSON.stringify({
+            division: selectedDivisionRef.current,
+            district: selectedDistrictRef.current,
+            upazila: selectedUpazilaRef.current,
+            area: area,
+          })
         );
-        toast.success(res.message, {
-          duration: 3000,
-          cancel: {
-            label: "cancel",
-          },
-        });
-      }
-    } catch (error) {
-      if (error) {
-        toast.error(error, {
-          duration: 3000,
-          cancel: {
-            label: "cancel",
-          },
-        });
+        const res = await UpdateInfo(newForm);
+        if (res.error) {
+          toast.error(res.error, {
+            duration: 3000,
+            cancel: {
+              label: "cancel",
+            },
+          });
+        }
+        if (res.success == true) {
+          router.push(
+            `/seller_dashboard/?message= Shop information updated successfully`
+          );
+          toast.success(res.message, {
+            duration: 3000,
+            cancel: {
+              label: "cancel",
+            },
+          });
+        }
+      } catch (error) {
+        if (error) {
+          toast.error(error, {
+            duration: 3000,
+            cancel: {
+              label: "cancel",
+            },
+          });
+        }
       }
     }
   };

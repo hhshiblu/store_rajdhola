@@ -4,7 +4,7 @@ import UpdateSellerInfo from "@/components/seller/updateSellerInfo";
 import Header from "@/components/seller/header";
 async function page({ searchParams }) {
   const seller = await getSeller();
-  console.log(seller);
+
   return (
     <div>
       <Header />

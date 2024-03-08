@@ -20,7 +20,6 @@ export const authOptions = {
           ],
         });
 
-        console.log(findUser, "find user");
         if (findUser) {
           return true;
         }
@@ -31,7 +30,6 @@ export const authOptions = {
 
     async jwt({ token, user }) {
       if (user) {
-        console.log("use token", user);
         token.sub = user._id;
         token.picture = user.avatar;
         token.phoneNumber = user.phoneNumber;

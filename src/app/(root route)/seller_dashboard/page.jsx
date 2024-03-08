@@ -7,7 +7,7 @@ const DashboardHero = async () => {
   const orderInfo = await sellerInfo();
   const seller = await getSeller();
 
-  if (!seller.address) {
+  if (!seller?.address) {
     redirect("/user-profile");
   }
   return (
