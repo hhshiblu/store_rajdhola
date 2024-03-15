@@ -18,10 +18,10 @@ function UpdateSellerInfo({ seller }) {
   const router = useRouter();
   const [name, setName] = useState(seller?.userName || "");
   const [shopName, setShopName] = useState(seller?.shopName || "");
-  const [category, setCategory] = useState(seller.category || "");
+  const [category, setCategory] = useState(seller?.category || "");
   const [number, setPhoneNumber] = useState(seller?.phoneNumber || "");
   const [email, setEmail] = useState(seller?.email || "");
-  const [area, setArea] = useState(seller.address?.area || "");
+  const [area, setArea] = useState(seller?.address?.area || "");
   const [zipcode, setZipcode] = useState(seller?.zipCode || "");
   const [avatar, setAvatar] = useState(null);
   const handleFileInputChange = (e) => {
@@ -248,20 +248,20 @@ function UpdateSellerInfo({ seller }) {
           <DivisionSelector
             divisions={Division}
             onSelectDivision={handleDivisionChange}
-            address={seller.address}
+            address={seller?.address}
           />
           <br />
           <DistrictSelector
             districts={selectedDivisionData.districts}
             onSelectDistrict={handleDistrictChange}
-            address={seller.address}
+            address={seller?.address}
           />
           <br />
 
           <UpazilaSelector
             upazilas={selectedDistrictData.upazilas}
             onSelectUpazila={handleUpazilaChange}
-            address={seller.address}
+            address={seller?.address}
           />
           <div className="w-[98%] md:w-[49%] md:pl-2">
             <label

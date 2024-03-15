@@ -74,10 +74,12 @@ export async function deleteFiles(filesToDelete) {
     };
 
     try {
-      const res = await s3Client.send(new DeleteObjectCommand(params));
-      return res;
+      await s3Client.send(new DeleteObjectCommand(params));
+      console.log(`File deleted successfully`);
     } catch (err) {
-      console.error(`Error deleting file ${fileName}:`, err);
+      return {
+        error: err.message,
+      };
     }
   }
 }

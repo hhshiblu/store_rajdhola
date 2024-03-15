@@ -8,7 +8,7 @@ export async function middleware(request) {
     "/seller_dashboard",
     "/seller_dashboard/all-orders",
     "/seller_dashboard/all-products",
-    "/seller_dashboard/create-product",
+    "/seller_dashboard/create-produc",
     "/seller_dashboard/withdraw-money",
     "/user-profile/",
     "/seller_dashboard",

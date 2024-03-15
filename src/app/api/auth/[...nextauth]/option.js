@@ -67,12 +67,16 @@ export const authOptions = {
 
         const db = await connectToDB();
         const collection = db.collection("sellers");
+
         const seller = await collection.findOne({
           $or: [{ email: identity }, { phoneNumber: parseInt(identity, 10) }],
+          status: "active",
         });
 
         if (!seller) {
-          throw new Error("Invalied credentials");
+          return {
+            error: "user is not valid right now",
+          };
         }
         const ispasswordOk = await compare(password, seller.password);
         if (!ispasswordOk) {

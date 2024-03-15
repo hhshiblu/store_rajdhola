@@ -106,7 +106,9 @@ function LoginFrom() {
                 )}
               </div>
             </div>
-
+            <div className="text-[14px] text-[#00453e] font[500] text-right   ">
+              <Link href="/login/forgot-password"> Forgotten password? </Link>
+            </div>
             <div>
               <SubmitButton name="Login" type="loading..." />
             </div>

@@ -31,6 +31,12 @@ const mainMenu = [
       {
         id: 22,
         icon: "zp zp-circle",
+        label: "Today_Orders",
+        link: "#",
+      },
+      {
+        id: 23,
+        icon: "zp zp-circle",
         label: "Refund_Orders",
         link: "#",
       },
@@ -131,7 +137,7 @@ function Sidebar({ children, seller }) {
           </div>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-1">
         <div className="hidden lg:flex flex-col shadow-lg justify-start h-[92vh] w-[290px] bg-[#195851] text-gray-50 duration-1000">
           <ul className="w-full ">
             {mainMenu.map((item) => (
@@ -250,7 +256,7 @@ function Sidebar({ children, seller }) {
             </ul>
           </div>
         </div>
-        <div className="md:px-8 px-2 py-1 w-full">{children}</div>
+        <div className="md:px-4 px-1 py-1 w-full ">{children}</div>
       </div>
     </div>
   );

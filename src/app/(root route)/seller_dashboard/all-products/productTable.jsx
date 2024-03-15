@@ -214,6 +214,18 @@ export const columns = [
           });
         }
       };
+      const EditProduct = async () => {
+        console.log(product);
+        // const res = await deleteProductAction(product._id, ImageKey);
+        // if (res.success == true) {
+        //   toast.success(res.message, {
+        //     duration: 3000,
+        //     cancel: {
+        //       label: "cancel",
+        //     },
+        //   });
+        // }
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -228,6 +240,11 @@ export const columns = [
               onClick={() => navigator.clipboard.writeText(product.id)}
             >
               Copy payment ID
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <form action={EditProduct}>
+                <button type="submit">Edit Product </button>
+              </form>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

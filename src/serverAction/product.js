@@ -39,9 +39,9 @@ export const deleteProductAction = async (id, imagekey) => {
   try {
     const db = await connectToDB();
     const collection = db.collection("products");
+    console.log(imagekey);
+    await deleteFiles(imagekey);
 
-    const res = await deleteFiles(imagekey);
-    console.log(res);
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
 
     if (result.acknowledged === true) {
@@ -56,10 +56,10 @@ export const deleteProductAction = async (id, imagekey) => {
   }
 };
 
-export const CreateProducts = async (formData) => {
+export const CreateProducts = async (formData, data) => {
   try {
     const db = await connectToDB();
-    const collection = db.collection("products");
+
     const files = formData.getAll("images");
     const name = formData.get("name");
     const description = formData.get("description");
@@ -67,14 +67,7 @@ export const CreateProducts = async (formData) => {
     const subCategory = formData.get("subCategory");
     const childCategory = formData.get("childCategory");
     const brandName = formData.get("brandName");
-    const model = formData.get("model");
-    const country = formData.get("country");
-    const productMaterial = formData.get("productMaterial");
-    const powerSupply = formData.get("powerSupply");
-    const capacity = formData.get("capacity");
-    const powerConsumed = formData.get("powerConsumed");
-    const warranty = formData.get("warranty");
-    const productType = formData.get("type");
+    console.log(name);
     const tags = formData.getAll("tag[]");
 
     const previousPrice = parseInt(formData.get("previousPrice"));
@@ -83,6 +76,7 @@ export const CreateProducts = async (formData) => {
     const color = formData.getAll("color[]");
     const size = formData.getAll("size[]");
     const sellerId = formData.get("sellerId");
+
     if (previousPrice < presentPrice) {
       return {
         error: "old price must be greater than Present price",
@@ -96,10 +90,7 @@ export const CreateProducts = async (formData) => {
       !subCategory ||
       !childCategory ||
       !presentPrice ||
-      !model ||
-      !productType ||
       !stock ||
-      !country ||
       !sellerId ||
       !files
     ) {
@@ -111,10 +102,15 @@ export const CreateProducts = async (formData) => {
     const imageUrls = [];
     const names = uuidv4();
     for (const file of files) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const res = await uploadFileToS3(buffer, names + file.name);
-      imageUrls.push({ url: res.url, objectkey: res.objectkey });
+      try {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const res = await uploadFileToS3(buffer, names + file.name);
+        imageUrls.push(res);
+      } catch (error) {
+        return { error: error.message };
+      }
     }
+
     const product = {
       name,
       description,
@@ -122,15 +118,7 @@ export const CreateProducts = async (formData) => {
       category,
       subCategory,
       childCategory,
-      country,
-      productType,
-      productMaterial,
-      powerSupply,
-      capacity,
-      powerConsumed,
-      warranty,
       brandName,
-      model,
       tags,
       previousPrice,
       presentPrice,
@@ -142,10 +130,11 @@ export const CreateProducts = async (formData) => {
       ratings: 0,
       reviews: [],
       commition,
+      ...data,
       createdAt: new Date(),
     };
-
-    const res = await collection.insertOne(product);
+    console.log(product);
+    const res = await db.collection("products").insertOne(product);
 
     if (res.acknowledged == true) {
       return {

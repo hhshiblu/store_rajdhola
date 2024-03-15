@@ -5,7 +5,6 @@ import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { MdBorderClear } from "react-icons/md";
 
 function MainInformation({ info }) {
-  console.log(info);
   const [detailsOrder, setDetailsOrder] = useState(false);
   return (
     <div>
