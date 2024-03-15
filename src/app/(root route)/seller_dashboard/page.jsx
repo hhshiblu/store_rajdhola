@@ -11,7 +11,7 @@ const DashboardHero = async () => {
     redirect("/user-profile");
   }
   return (
-    <div className="w-full  ml-auto scroll_y_hiiden  h-[87vh] overflow-y-auto overflow-hidden pt-8">
+    <div className="w-full  ml-auto scroll_y_hiiden  h-[91vh] overflow-y-auto overflow-hidden pt-8">
       <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
       <Suspense fallback={true}>
         <MainInformation info={orderInfo} />
