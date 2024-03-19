@@ -4,20 +4,47 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { signIn } from "next-auth/react";
 import SubmitButton from "@/components/route/button/submitButton";
 import Link from "next/link";
+import { toast } from "sonner";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 function LoginFrom() {
+  const router = useRouter();
   const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword1, setShowPassword1] = useState(false);
   const HandelSubmit = async () => {
     try {
-      await signIn("credentials", {
+      const res = await signIn("credentials", {
         identity,
         password,
         callbackUrl: "/seller_dashboard",
+        redirect: false,
       });
+
+      if (res.ok == false) {
+        toast.error(res.error, {
+          duration: 3000,
+          cancel: {
+            label: "cancel",
+          },
+        });
+      }
+      if (res.ok == true) {
+        router.push(res.url);
+        toast.success("user login successfully", {
+          duration: 3000,
+          cancel: {
+            label: "cancel",
+          },
+        });
+      }
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message, {
+        duration: 3000,
+        cancel: {
+          label: "cancel",
+        },
+      });
     }
   };
   return (

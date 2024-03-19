@@ -191,7 +191,7 @@ function Sidebar({ children, seller }) {
           </ul>
         </div>
         <div
-          className=" z-50 md:hidden overflow-hidden  fixed top-[8vh]  flex flex-col justify-start h-[92vh] bg-[#195851] text-gray-50 duration-500"
+          className=" z-50 lg:hidden overflow-hidden  fixed top-[8vh]  flex flex-col justify-start h-[92vh] bg-[#195851] text-gray-50 duration-500"
           style={{ width: sidebar ? "250px" : "0px" }}
         >
           <div className="flex flex-row justify-normal items-center w-full">

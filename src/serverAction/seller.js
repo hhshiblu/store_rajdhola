@@ -179,7 +179,6 @@ export async function UpdateInfo(fromData) {
 
 export const getSellerByIdentity = async (identity) => {
   try {
-    console.log(identity);
     const db = await connectToDB();
     const seller = await db.collection("sellers").findOne({
       $or: [{ email: identity }, { phoneNumber: parseInt(identity, 10) }],

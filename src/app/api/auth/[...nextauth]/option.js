@@ -18,8 +18,8 @@ export const authOptions = {
             { email: user.email },
             { phoneNumber: parseInt(user.phoneNumber, 10) },
           ],
+          status: "active",
         });
-
         if (findUser) {
           return true;
         }
@@ -30,12 +30,15 @@ export const authOptions = {
 
     async jwt({ token, user }) {
       if (user) {
+        token.name = user.userName;
+        token.shopName = user.shopName;
         token.sub = user._id;
         token.picture = user.avatar;
         token.phoneNumber = user.phoneNumber;
         token.status = user.status;
         token.address = user.address;
       }
+
       return token;
     },
 
@@ -74,13 +77,11 @@ export const authOptions = {
         });
 
         if (!seller) {
-          return {
-            error: "user is not valid right now",
-          };
+          throw new Error("Unauthorized login attempt !");
         }
         const ispasswordOk = await compare(password, seller.password);
         if (!ispasswordOk) {
-          throw new Error("Invalied credentials");
+          throw new Error("Invalied identity or password");
         }
 
         return seller;

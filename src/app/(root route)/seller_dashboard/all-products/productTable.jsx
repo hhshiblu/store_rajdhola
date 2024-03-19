@@ -7,10 +7,6 @@ import {
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -18,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -96,6 +92,27 @@ export const columns = [
     header: () => <div>Id</div>,
     cell: ({ row }) => <div className="lowercase">{row.getValue("_id")}</div>,
   },
+
+  {
+    accessorKey: "images",
+    header: () => <div>Image</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">
+        {row.original.images.length > 0 ? (
+          <Image
+            src={row.original.images[0].url}
+            alt="Placeholder"
+            width={500}
+            height={500}
+            className="w-[70px]"
+          />
+        ) : (
+          <Image src="" alt="Placeholder" />
+        )}
+      </div>
+    ),
+  },
+
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -248,7 +265,7 @@ export const columns = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href="#">Details</Link>
+              <a href={`/product/${product._id}`}>Details</a>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <form action={deleteProduct}>

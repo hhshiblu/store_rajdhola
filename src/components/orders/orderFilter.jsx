@@ -51,7 +51,7 @@ function OrderFilter() {
         href={pathname + "?" + createQueryString("_time", "last_year")}
         className="text-[16px] pt-1 pr-4 cursor-pointer hover:text-red-500 leading-[20px]  inline-block"
       >
-        LastMonth_orders
+        LastYear_orders
       </a>
     </div>
   );

@@ -67,7 +67,7 @@ export const CreateProducts = async (formData, data) => {
     const subCategory = formData.get("subCategory");
     const childCategory = formData.get("childCategory");
     const brandName = formData.get("brandName");
-    console.log(name);
+
     const tags = formData.getAll("tag[]");
 
     const previousPrice = parseInt(formData.get("previousPrice"));
@@ -133,7 +133,7 @@ export const CreateProducts = async (formData, data) => {
       ...data,
       createdAt: new Date(),
     };
-    console.log(product);
+
     const res = await db.collection("products").insertOne(product);
 
     if (res.acknowledged == true) {
@@ -188,4 +188,48 @@ export const comitionPrice = (price, category) => {
   }
 
   return comitionPrice;
+};
+
+export const UpdateProducts = async (data, id) => {
+  try {
+    const db = await connectToDB();
+
+    if (data.previousPrice < data.presentPrice) {
+      return {
+        error: "old price must be greater than Present price",
+      };
+    }
+    if (
+      !data.name ||
+      !data.description ||
+      !data.tags ||
+      !data.presentPrice ||
+      !data.stock
+    ) {
+      return {
+        error: "Mark fields are required",
+      };
+    }
+
+    const product = {
+      ...data,
+      updatedAt: new Date(),
+    };
+
+    const res = await db.collection("products").updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: product,
+      }
+    );
+    if (res.acknowledged == true) {
+      revalidatePath(`/product/${id}`);
+      return {
+        success: true,
+        message: "Product update successfully",
+      };
+    }
+  } catch (error) {
+    return { message: error.message };
+  }
 };
